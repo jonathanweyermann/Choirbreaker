@@ -1,4 +1,4 @@
-# Radix / Beyond the Void: the story
+# Choirbreaker: the story
 
 ## The Silence
 
@@ -14,7 +14,7 @@ One Choir fighter did not make it home. It clipped a mining tether over Callisto
 
 Dr. Tomas Reyes spent two years taking it apart. The fighter's drive, its shield emitters and, most important, its signature mask went into the last human strike fighter, rebuilt around them. To Choir sensors at a distance, the new ship looks like one of their own returning from a hunt. Up close the disguise fails: anything that actually sees the ship knows it for what it is, and calls the others.
 
-The survivors named the ship **Radix**, Latin for root. Earth was the tree. They are what is left in the ground.
+The survivors named the ship **Dissonance**. The Choir sings in perfect harmony; this is the one note that does not belong.
 
 ## The Requiem
 
@@ -47,7 +47,7 @@ The outer worlds, where the swarm is fuelled, cast, frozen and grown. It ends un
 
 #### Delta-9
 
-1. **Relay Station.** The Radix drops onto Delta-9 under the Requiem's shadow. The relay station carries the Choir's signals across the system; cut it, and the strike stays a rumor for a few more hours.
+1. **Relay Station.** The Dissonance drops onto Delta-9 under the Requiem's shadow. The relay station carries the Choir's signals across the system; cut it, and the strike stays a rumor for a few more hours.
 2. **Toxin Refinery.** Delta-9's air is poison, and the Choir drink it. The refinery turns the atmosphere into fuel for the swarm. Every tank that burns is a fighter that never launches.
 3. **Launch Silos.** The refinery's fuel ran north along a pipeline to Delta-9's launch silos, where finished fighters are fuelled and fired into orbit. Kill the pumps, then go down the silos after the fighters racked at the bottom.
 
@@ -74,7 +74,7 @@ Up the gravity well from Tau-3 and in toward Omega, the crown world, through eve
 
 13. **Brood Ark.** The queen's last brood had already launched, in a living ark with a brood mother as big as the queen in its hold.
 14. **Tether Anchor.** The pilots grown in Tau-3's warrens are lifted up a space elevator to the orbital yards, to be fitted into hulls. Cut the anchor and the yards starve.
-15. **Orbital Garden.** With the tether cut, the yards have one larder left: a garden cylinder turning over Tau-3, a world rolled up inside a spinning drum. Its meadows, lakes and pilot roosts curve up round the Radix and meet overhead. Burn the seed towers and the irrigation pumps on the far shore, and the yards go hungry.
+15. **Orbital Garden.** With the tether cut, the yards have one larder left: a garden cylinder turning over Tau-3, a world rolled up inside a spinning drum. Its meadows, lakes and pilot roosts curve up round the Dissonance and meet overhead. Burn the seed towers and the irrigation pumps on the far shore, and the yards go hungry.
 16. **Orbital Yards.** The yards the garden fed: a double drum, an industrial cylinder round a second inner one, where the swarm's hulls are pressed and fitted. Wreck the presses, break the bulkhead and kill the dynamos that spin the inner drum.
 
 #### Sigma-4
@@ -93,19 +93,19 @@ Up the gravity well from Tau-3 and in toward Omega, the crown world, through eve
 
 It doesn't. Omega was never the source. The signal threads further in, past the crown world, into the shroud.
 
-### Episode III: Beyond the Void
+### Episode III: Into the Void
 
 Inside the shroud, where Nadir hides a second system of worlds, to the voice at its heart.
 
 #### The shroud and the hidden worlds
 
-25. **Dust Veil.** The Void's edge is a wall of dust strung with veil buoys and seeded with mines. The Radix goes first, so the Requiem can follow it in unseen.
-26. **Abyss Shaft.** The first world inside the Void, Void-1, has been mined hollow to its core, and its rock ground into the dust of the shroud. The signal runs straight down its central shaft, over a hundred units deep, past ledges, crystal spires and laser-guarded tunnels. The Radix follows it down and rides the updraft back out.
-27. **Sunless Sea.** The shaft's updraft throws the Radix into the cavern where the mining stopped: a sea that has never seen a sun. The signal ends at a drowned shrine on an island in the middle, whose echo cores pass the song up the shaft and out through the shroud.
+25. **Dust Veil.** The Void's edge is a wall of dust strung with veil buoys and seeded with mines. The Dissonance goes first, so the Requiem can follow it in unseen.
+26. **Abyss Shaft.** The first world inside the Void, Void-1, has been mined hollow to its core, and its rock ground into the dust of the shroud. The signal runs straight down its central shaft, over a hundred units deep, past ledges, crystal spires and laser-guarded tunnels. The Dissonance follows it down and rides the updraft back out.
+27. **Sunless Sea.** The shaft's updraft throws the Dissonance into the cavern where the mining stopped: a sea that has never seen a sun. The signal ends at a drowned shrine on an island in the middle, whose echo cores pass the song up the shaft and out through the shroud.
 28. **Crystal Canyon.** At the end of a canyon of ice and crystal the **Void Carrier** is docked. It is one of the carriers that brought the swarm to Earth, and its hull is still scored from the crossing.
 29. **Suncatcher.** The shroud lets no light out because the Choir catch it. Void-2B is a moon tiled with mirrors that turn Nadir's light into power for the foundries deeper in.
 30. **Drift Foundry.** The foundry the mirrors lit, on Void-3. It does not make fighters: its assembly yard holds a berth kilometres long, and the berth is empty.
-31. **The Ark.** The foundry's ship had already left its dock: the Choir's ark, a hull kilometres long, drifting deeper into the Void on its own reactor. The Radix boards through the docking bay, kills the governors that spin the habitat drum and the regulators that hold the reactor steady, and gets off at the bridge before it tears itself apart.
+31. **The Ark.** The foundry's ship had already left its dock: the Choir's ark, a hull kilometres long, drifting deeper into the Void on its own reactor. The Dissonance boards through the docking bay, kills the governors that spin the habitat drum and the regulators that hold the reactor steady, and gets off at the bridge before it tears itself apart.
 32. **Trophy Field.** Past the dead ark the Void opens on rows of wrecks, hulls of every shape, none of them Choir-built. Whoever made them is gone. The archive at the heart of the field will say why.
 33. **Mirror Archive.** The Choir keep records. Three data cores seal the archive, and destroying them breaks it open. What it shows is the reason the song exists: a catalog of three hundred and twelve silenced worlds. Earth is the latest entry. Every one of them was found the same way: their first radio voices reached Nadir, and the **Herald** heard them, and sang the swarm toward them.
 34. **Ash Mesas.** A dead plain under a red sky. This was a living world once, the three hundred and eleventh. The Choir dragged its corpse inside the Void and built the Herald's listening array across it. Three tuning cores keep the array aimed. Destroy them and the Herald goes deaf to everything but you.
@@ -116,7 +116,7 @@ Inside the shroud, where Nadir hides a second system of worlds, to the voice at 
 
 When the Herald dies, the song stops. Across the stars, wherever swarms are hunting, the fighters lose their voice and drift. The Requiem's sensors record the Choir's channel going flat for the first time since the night of the chord.
 
-Halvorsen recovers the Radix from the shroud and sends one message home, slow and patient across the dark:
+Halvorsen recovers the Dissonance from the shroud and sends one message home, slow and patient across the dark:
 
 > *It's quiet out here now. Their kind of quiet.*
 
@@ -124,9 +124,9 @@ Then she turns the Requiem toward Sol. There is a root in the ground back there,
 
 ## How the game's systems fit the story
 
-- **Stealth signature.** Enemies far away mistake the Radix for one of their own. Anything that sees it raises the alarm, and nearby hostiles wake up. That is why enemies ignore you until they spot you.
-- **Warp gates.** The green gates are Choir transit gates. The stolen signature lets the Radix use them to hop between sites.
-- **Upgrades.** Amber crystals are Choir weapon cores; Reyes built the Radix to graft them in, which is how the neutron cannon climbs from MK I Pulse to MK VII Lance. Violet crystals are swarm-pod racks for the launcher, pink crystals are seeker munitions, and green crystals are repair nanites from Choir maintenance depots.
+- **Stealth signature.** Enemies far away mistake the Dissonance for one of their own. Anything that sees it raises the alarm, and nearby hostiles wake up. That is why enemies ignore you until they spot you.
+- **Warp gates.** The green gates are Choir transit gates. The stolen signature lets the Dissonance use them to hop between sites.
+- **Upgrades.** Amber crystals are Choir weapon cores; Reyes built the Dissonance to graft them in, which is how the neutron cannon climbs from MK I Pulse to MK VII Lance. Violet crystals are swarm-pod racks for the launcher, pink crystals are seeker munitions, and green crystals are repair nanites from Choir maintenance depots.
 - **Checkpoints.** Each opened gate or downed boss lets the Requiem mark a recovery point with a low-power ping.
 - **Elites.** Gold-eyed enemies are Earth-burners: veterans of the swarm that destroyed Earth. The Choir mark each silenced world in gold.
 - **Escorts.** Wardens flying with two drones are honor guards.
@@ -138,7 +138,7 @@ Then she turns the Requiem toward Sol. There is a root in the ground back there,
 
 ### Story page (before the menu)
 
-> Thirty-eight light-years away, a red star sang a chord, and nine days later its swarm burned the Earth in forty hours. Forty thousand of us survived on frozen outposts, and from the wreck of one of their fighters we built the Radix, a human ship that wears their signature. The stealth cruiser Requiem carried it fourteen months across the dark to Nadir, the system the swarm came from. Now the Radix drops onto their worlds to burn the refineries, foundries, hives and gates that built the swarm. Somewhere beyond the Void, at the heart of their system, is the voice that called them to Earth, and the time for talking is over.
+> Thirty-eight light-years away, a red star sang a chord, and nine days later its swarm burned the Earth in forty hours. Forty thousand of us survived on frozen outposts, and from the wreck of one of their fighters we built the Dissonance, a human ship that wears their signature. The stealth cruiser Requiem carried it fourteen months across the dark to Nadir, the system the swarm came from. Now the Dissonance drops onto their worlds to burn the refineries, foundries, hives and gates that built the swarm. Somewhere beyond the Void, at the heart of their system, is the voice that called them to Earth, and the time for talking is over.
 
 ### Mission briefings (before each sector, under the episode map)
 
@@ -172,7 +172,7 @@ Then she turns the Requiem toward Sol. There is a root in the ground back there,
 23. **OMEGA CROWN CITY**: The rift ends under the walls of the crown city, the one place in Nadir the Choir built to dwell in rather than to make war from. Three emitter towers stand over it and hold the shield that covers the core. Break the emitters on the tower tops, force the citadel gate, kill the core locks inside, and take the shaft down.
 24. **OMEGA CORE BREACH**: The crown city's shield is down and the shaft to the core is open. The core powers Omega's defenses: destroy the feeders round it, then the four pylons that shield the Omega Sentinel, then the Sentinel itself. Bring it down; this should end the song.
 
-**EPISODE III // BEYOND THE VOID**
+**EPISODE III // INTO THE VOID**
 
 25. **THE SHROUD DUST VEIL**: The Sentinel is dead, but the song did not stop: Omega was never the source. The signal comes from inside the Void, a shroud of dark dust around Nadir's inner worlds, and the Requiem is going in. The shroud's edge is strung with veil buoys that would see it coming. Destroy the buoys, kill the minelayers seeding the passage, and lead the Requiem through.
 26. **VOID-1 ABYSS SHAFT**: The Requiem is through the veil, deeper in than any survey has seen, and now you can see where the shroud came from: Void-1 has been mined hollow to its core, and its rock ground into the dust that hides Nadir's inner worlds. The signal runs straight down the shaft at its centre. Follow it down, destroying the relays that carry it, then ride the updraft back out.

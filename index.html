@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-  <title>Radix / Beyond the Void</title>
+  <title>Choirbreaker</title>
   <style>
     :root { color-scheme: dark; font-family: Consolas, "Courier New", monospace; }
     * { box-sizing: border-box; }
@@ -173,7 +173,7 @@
   <div class="hud" aria-hidden="true">
     <div class="scanlines"></div>
     <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
-    <div class="top"><div class="brand">RADIX <small>BEYOND THE VOID / FLIGHT TEST</small></div><div class="mission"><span id="levelText">THETA-2</span> // <span id="zoneText">LAUNCH BAY</span><div class="objective" id="objectiveText"></div></div></div>
+    <div class="top"><div class="brand">CHOIRBREAKER <small>FLIGHT TEST</small></div><div class="mission"><span id="levelText">THETA-2</span> // <span id="zoneText">LAUNCH BAY</span><div class="objective" id="objectiveText"></div></div></div>
     <div class="damage-flash" id="damageFlash"></div>
     <div class="shield-flash" id="shieldFlash"></div>
     <div class="aegis-flash" id="aegisFlash"></div>
@@ -207,7 +207,7 @@
   <div class="rotate-hint">TURN YOUR PHONE SIDEWAYS<br>TO FLY</div>
   <div class="menu" id="menu" role="dialog" aria-label="Game menu">
     <div class="menu-box">
-      <h1>RADIX<small>BEYOND THE VOID</small></h1>
+      <h1>CHOIRBREAKER</h1>
       <div class="row" style="margin-top: 26px"><button class="primary" id="resumeButton">RESUME</button><button class="primary" id="newGameButton">NEW GAME</button><button class="primary" id="fullscreenButton">FULL SCREEN</button><button class="primary" id="pitchButton">PITCH: NORMAL</button></div>
       <h2 id="graphicsHead">GRAPHICS</h2>
       <div class="row" id="graphicsRow"></div>
@@ -225,8 +225,8 @@
   </div>
   <div class="menu show" id="intro" role="dialog" aria-label="Story">
     <div class="menu-box">
-      <h1>RADIX<small>BEYOND THE VOID</small></h1>
-      <p class="story">Thirty-eight light-years away, a red star sang a chord, and nine days later its swarm burned the Earth in forty hours. Forty thousand of us survived on frozen outposts, and from the wreck of one of their fighters we built the Radix, a human ship that wears their signature. The stealth cruiser Requiem carried it fourteen months across the dark to Nadir, the system the swarm came from. Now the Radix drops onto their worlds to burn the refineries, foundries, hives and gates that built the swarm. Somewhere beyond the Void, at the heart of their system, is the voice that called them to Earth, and the time for talking is over.</p>
+      <h1>CHOIRBREAKER</h1>
+      <p class="story">Thirty-eight light-years away, a red star sang a chord, and nine days later its swarm burned the Earth in forty hours. Forty thousand of us survived on frozen outposts, and from the wreck of one of their fighters we built the Dissonance, a human ship that wears their signature. The stealth cruiser Requiem carried it fourteen months across the dark to Nadir, the system the swarm came from. Now the Dissonance drops onto their worlds to burn the refineries, foundries, hives and gates that built the swarm. Somewhere beyond the Void, at the heart of their system, is the voice that called them to Earth, and the time for talking is over.</p>
       <div class="row" style="margin-top: 24px"><button class="primary" id="introButton" disabled>LOADING</button></div>
       <p class="hint" id="soundHint">TAP ANYWHERE OR PRESS A KEY FOR MUSIC</p>
     </div>
@@ -8566,7 +8566,7 @@
           omega: { name: 'OMEGA', orbit: 0.36, angle: 2.35, color: '#c08cff' },
           station: { name: 'HIGH STATION', parent: 'omega', moon: 22, angle: 3.9, color: '#e0c8ff', ship: true },
         } },
-      { name: 'EPISODE III', title: 'BEYOND THE VOID', from: 24, view: 'void', map: 'INSIDE THE VOID',
+      { name: 'EPISODE III', title: 'INTO THE VOID', from: 24, view: 'void', map: 'INSIDE THE VOID',
         intro: 'Inside the shroud, where no survey has ever looked, Nadir hides a second system of worlds, and somewhere at its heart the song is still being sung.',
         orbits: [['void1', 0.78], ['void2', 0.63], ['void3', 0.5], ['void4', 0.38], ['void5', 0.28], ['void6', 0.18]],
         places: {

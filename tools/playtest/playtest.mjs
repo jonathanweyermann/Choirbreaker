@@ -47,7 +47,7 @@ const errors = [];
 page.on('pageerror', e => errors.push(String(e)));
 page.on('console', m => { if (m.type() === 'error' && !m.text().startsWith('Failed to load resource')) errors.push(m.text()); });
 page.on('response', r => { if (r.status() >= 400 && !r.url().endsWith('favicon.ico')) errors.push(`${r.status()} ${r.url()}`); });
-await page.goto(`http://127.0.0.1:${port}/index.html?debug`);
+await page.goto(`http://127.0.0.1:${port}/play/index.html?debug`);
 await page.waitForFunction(() => window.radix && window.radix.level, null, { timeout: 60000 });
 await page.waitForTimeout(2500);
 await page.addScriptTag({ content: await readFile(join(here, 'autopilot.js'), 'utf8') });

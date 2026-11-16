@@ -121,6 +121,9 @@
     .menu .sectors button { display: flex; justify-content: space-between; gap: 10px; text-align: left; }
     .menu .sectors small { color: #f0a65c; font-size: 10px; white-space: nowrap; }
     .menu .sectors button:disabled small { color: inherit; }
+    .menu .sectors button:disabled { opacity: .45; cursor: not-allowed; }
+    .menu .episode-locked { grid-column: 1 / -1; padding: 12px; border: 1px dashed #3f5a66; color: #7f97a3; font-size: 11px; letter-spacing: .2em; text-align: center; opacity: .6; }
+    .menu .demo-note { margin: 6px 0 10px; padding: 10px 12px; border: 1px solid #ffb35c66; color: #ffd9a8; font-size: 12px; text-align: left; }
     .menu .sectors h3 { grid-column: 1 / -1; margin: 10px 0 2px; color: #65e9ff; font-size: 10px; font-weight: normal; letter-spacing: .24em; text-align: left; }
     .menu .sectors h3:first-child { margin-top: 0; }
     .menu .brief.episode-intro { margin-top: 10px; color: #f0d2a8; font-style: italic; }
@@ -215,8 +218,9 @@
       <h2>DIFFICULTY</h2>
       <div class="row" id="difficultyRow"></div>
       <h2>SECTOR SELECT</h2>
+      <p id="demoNote" class="demo-note" hidden><b>DEMO:</b> sectors 1 to 4 are playable. The full game has three episodes of 12 sectors each, 36 in all, with a boss at the end of every episode.</p>
       <div class="sectors" id="sectorList"></div>
-      <h2>ARSENAL // TIER LIST</h2>
+      <h2 id="arsenalHead">ARSENAL // TIER LIST</h2>
       <div class="arsenal" id="arsenalList"></div>
       <h2>SAVE CODE</h2>
       <div class="row"><button class="primary" id="exportSave">COPY SAVE CODE</button><button class="primary" id="importSave">LOAD SAVE CODE</button></div>
@@ -267,7 +271,6 @@
   </div>
   <style>
     .paywall { margin-top: 16px; }
-    .sectors button.paid { opacity: .6; } .sectors button.paid small { color: #ffb35c; }
     .paywall .row { gap: 8px; flex-wrap: wrap; }
     .paywall a.buy { text-decoration: none; display: inline-block; font-size: 13px; letter-spacing: .14em; color: #fff; background: #14394a; border: 1px solid #75edff; padding: 11px 24px; }
     .paywall a.buy:hover, .paywall a.buy:focus-visible { background: #1d5266; outline: none; }
@@ -8434,6 +8437,7 @@
     }
     const menu = document.getElementById('menu'), resumeButton = document.getElementById('resumeButton');
     const graphicsRow = document.getElementById('graphicsRow'), graphicsHead = document.getElementById('graphicsHead');
+    const demoNote = document.getElementById('demoNote'), arsenalHead = document.getElementById('arsenalHead');
     const sectorList = document.getElementById('sectorList'), arsenalList = document.getElementById('arsenalList'), difficultyRow = document.getElementById('difficultyRow'), menuNote = document.getElementById('menuNote');
     const upgradeList = document.getElementById('upgradeList'), upgradeHead = document.getElementById('upgradeHead');
     let menuOpen = false, menuOpenedAt = 0, started = false, sectorTime = 0, briefTimer = 0;
@@ -8496,9 +8500,19 @@
         item.append(head, body); return item;
       }));
       upgradeHead.textContent = `UPGRADES // ${ranksSpent()} OF ${levelIndex} POINTS SPENT`;
+      // The demo (no license yet) shows Episode I only: sectors 1-4 playable, the rest of it greyed out, and Episodes II and
+      // III as one greyed card each. No loadouts are shown. (sectorLocked is defined further down, so guard the first render.)
+      let demo = false; try { demo = Number.isFinite(FREE_SECTORS) && sectorLocked(FREE_SECTORS); } catch { /* not defined yet */ }
+      demoNote.hidden = !demo; arsenalHead.hidden = arsenalList.hidden = demo; arsenalList.style.display = demo ? 'none' : '';
       sectorList.replaceChildren(...LEVELS.flatMap((def, i) => {
         const episode = EPISODES.find(e => e.from === i), head = episode && document.createElement('h3');
         if (head) head.textContent = `${episode.name} // ${episode.title}`;
+        if (demo && i >= 12) {
+          if (!episode) return [];
+          const card = document.createElement('div'), next = EPISODES.find(e => e.from > i), count = (next ? next.from : LEVELS.length) - i;
+          card.className = 'episode-locked'; card.textContent = `${count} SECTORS // FULL GAME`;
+          return [head, card];
+        }
         const button = document.createElement('button'), kit = recordOf(i);
         const label = document.createElement('span'), detail = document.createElement('small');
         label.textContent = `${i + 1}. ${def.name} ${def.title}`;
@@ -8506,12 +8520,10 @@
         const test = !kit && i > 0 && UNLOCK_ALL ? testKit(i) : null;
         detail.textContent = kit ? `${WEAPONS[clamp(kit.weapon || 1, 1, WEAPONS.length) - 1].name} / ${kit.missiles || 0} MSL${best}`
           : test ? `TEST // ${WEAPONS[test.weapon - 1].name} / ${test.missiles} MSL` : i === 0 ? 'MK I / 0 MSL' : 'LOCKED';
-        // Past the free sectors without a license: tagged FULL GAME, and picking one goes straight to its briefing, which
-        // shows the buy panel. (sectorLocked is defined further down, so guard the first render.)
-        let paid = false; try { paid = sectorLocked(i); } catch { /* not defined yet */ }
-        if (paid) { detail.textContent = 'FULL GAME'; button.classList.add('paid'); }
-        button.append(label, detail); button.disabled = !kit && i > 0 && !UNLOCK_ALL && !paid;
-        button.addEventListener('click', () => { startSector(i); paid ? showBriefing() : i ? showUpgrades(true) : showBriefing(); });
+        if (demo) detail.textContent = i >= FREE_SECTORS ? 'FULL GAME' : best ? `BEST ${best.slice(3)}` : 'DEMO';
+        button.append(label, detail);
+        button.disabled = demo ? i >= FREE_SECTORS : !kit && i > 0 && !UNLOCK_ALL;
+        button.addEventListener('click', () => { startSector(i); i ? showUpgrades(true) : showBriefing(); });
         return head ? [head, button] : [button];
       }));
     }

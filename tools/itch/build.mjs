@@ -37,6 +37,11 @@ for (const edition of ['demo', 'full']) {
   else zip(folder, join(dist, 'choirbreaker-full.zip'));
 }
 
+// An unlocked copy on the site for testing the full game; hidden from search engines, but anyone with the link can play.
+const testDir = join(root, 'play', 'testingzaqwsxcde');
+await mkdir(testDir, { recursive: true });
+await writeFile(join(testDir, 'index.html'), game.replace(LINE, "const EDITION = 'itch-full';").replace('<meta charset="utf-8">', '<meta charset="utf-8">\n  <meta name="robots" content="noindex, nofollow">'));
+
 // Cover (630x500, itch's size) and screenshots, cut from the landing page art.
 const ff = (args) => run('ffmpeg', ['-y', '-loglevel', 'error', ...args]);
 ff(['-i', join(root, 'img', 'hero.jpg'), '-vf', "crop=iw*0.62:ih*0.66:iw*0.02:ih*0.08,scale=630:500:force_original_aspect_ratio=increase,crop=630:500,drawbox=x=0:y=ih-190:w=iw:h=190:color=black@0.62:t=fill,drawtext=text='CHOIRBREAKER':fontfile='C\\:/Windows/Fonts/consolab.ttf':fontsize=58:fontcolor=white:x=(w-tw)/2:y=h-150:shadowcolor=0x75edff:shadowx=0:shadowy=0:borderw=2:bordercolor=0x14394a,drawtext=text='HUMANITY’S LAST STAND':fontfile='C\\:/Windows/Fonts/consola.ttf':fontsize=20:fontcolor=0xffb35c:x=(w-tw)/2:y=h-80", join(dist, 'cover.png')]);

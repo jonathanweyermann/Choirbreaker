@@ -8913,17 +8913,51 @@
     // Save codes carry progress between versions (the browser demo and the download) and between machines.
     const saveCode = document.getElementById('saveCode'), saveNote = document.getElementById('saveNote');
     saveCode.addEventListener('keydown', e => e.stopPropagation());
+    // A code is the save as compact JSON (short keys, zero upgrade ranks left out), deflated and base64url'd: CB2:...
+    // CB1 codes (plain base64 JSON) from before still load.
+    const SHORT = { weapon: 'w', missiles: 'm', launcher: 'l', best: 'b', ranks: 'r' };
+    const LONG = Object.fromEntries(Object.entries(SHORT).map(([k, v]) => [v, k]));
+    const squeeze = (data) => {
+      const out = { ...data, sectors: {} };
+      for (const [title, rec] of Object.entries(data.sectors || {})) {
+        const r = {};
+        for (const [k, v] of Object.entries(rec)) {
+          if (k === 'ranks') { const ranks = Object.fromEntries(Object.entries(v || {}).filter(([, n]) => n)); if (Object.keys(ranks).length) r.r = ranks; }
+          else r[SHORT[k] || k] = v;
+        }
+        out.sectors[title] = r;
+      }
+      if (out.ranks) { out.ranks = Object.fromEntries(Object.entries(out.ranks).filter(([, n]) => n)); }
+      return out;
+    };
+    const unsqueeze = (data) => {
+      const out = { ...data, sectors: {} };
+      for (const [title, rec] of Object.entries(data.sectors || {})) out.sectors[title] = Object.fromEntries(Object.entries(rec).map(([k, v]) => [LONG[k] || k, v]));
+      return out;
+    };
+    const pipe = async (bytes, stream) => new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(stream)).arrayBuffer());
+    const toB64 = (bytes) => { let t = ''; for (const b of bytes) t += String.fromCharCode(b); return btoa(t).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); };
+    const fromB64 = (text) => Uint8Array.from(atob(text.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
+    async function makeCode() {
+      const json = new TextEncoder().encode(JSON.stringify(squeeze(save)));
+      return 'CB2:' + toB64(await pipe(json, new CompressionStream('deflate-raw')));
+    }
+    async function readCode(code) {
+      const text = code.trim().replace(/\s+/g, '');
+      if (text.startsWith('CB1:')) return JSON.parse(decodeURIComponent(escape(atob(text.slice(4)))));
+      if (!text.startsWith('CB2:')) throw new Error('not a code');
+      return unsqueeze(JSON.parse(new TextDecoder().decode(await pipe(fromB64(text.slice(4)), new DecompressionStream('deflate-raw')))));
+    }
     document.getElementById('exportSave').addEventListener('click', async () => {
       writeSave();
-      saveCode.value = 'CB1:' + btoa(unescape(encodeURIComponent(JSON.stringify(save))));
+      saveCode.value = await makeCode();
       saveCode.select();
       try { await navigator.clipboard.writeText(saveCode.value); saveNote.textContent = "Save code copied. Paste it into the other game's menu and press LOAD SAVE CODE."; }
       catch { saveNote.textContent = "Copy the code above (it is selected) and paste it into the other game's menu."; }
     });
-    document.getElementById('importSave').addEventListener('click', () => {
+    document.getElementById('importSave').addEventListener('click', async () => {
       try {
-        const text = saveCode.value.trim().replace(/^CB1:/, '').replace(/\s+/g, '');
-        const data = JSON.parse(decodeURIComponent(escape(atob(text))));
+        const data = await readCode(saveCode.value);
         if (!data || typeof data.sectors !== 'object') throw new Error('not a save');
         localStorage.setItem(SAVE_KEY, JSON.stringify(data));
         saveNote.textContent = 'Save loaded. Restarting...'; setTimeout(() => location.reload(), 600);

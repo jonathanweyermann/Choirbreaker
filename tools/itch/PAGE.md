@@ -30,7 +30,7 @@ Build the uploads with `node tools/itch/build.mjs`; everything lands in `dist/it
 >
 > Forty thousand survivors are left on frozen outposts. From the wreck of one of the swarm's fighters they built the *Dissonance*: a human ship that wears the enemy's signature. You fly it into the system that sent them.
 >
-> **Play the first six sectors free, right here in your browser.**
+> **Play the first four sectors free, right here in your browser.**
 >
 > - Full 3D flight: turn, roll, strafe and dive in any direction through stations, gorges, flooded docks and spinning drum worlds
 > - 36 sectors across three episodes, each with its own objectives, music, sky and secrets

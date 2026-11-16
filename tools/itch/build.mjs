@@ -1,5 +1,5 @@
 // Builds the itch.io uploads from play/index.html:
-//   dist/itch/choirbreaker-demo.zip   the browser demo (sectors 1-6), uploaded as "This file will be played in the browser"
+//   dist/itch/choirbreaker-demo.zip   the browser demo (sectors 1-4), uploaded as "This file will be played in the browser"
 //   dist/itch/choirbreaker-full.zip   the paid download, every sector open
 //   dist/itch/cover.png               630x500 cover image, and screenshots at 1920x1080
 //   node tools/itch/build.mjs

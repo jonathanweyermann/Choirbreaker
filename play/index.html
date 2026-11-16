@@ -256,7 +256,7 @@
       <p class="brief" id="briefingText"></p>
       <div class="row" style="margin-top: 16px"><button class="primary" id="launchButton">LAUNCH</button></div>
       <div class="paywall" id="paywall" hidden>
-        <p class="brief"><b>The free flight ends here.</b> Sectors 7 to 36, the rest of Episode I, The Crown and Into the Void, are in the full game: thirty more sectors and every boss, for a one-time $7.99.</p>
+        <p class="brief"><b>The free flight ends here.</b> Sectors 5 to 36, the rest of Episode I, The Crown and Into the Void, are in the full game: thirty-two more sectors and every boss, for a one-time $7.99.</p>
         <div class="row"><a class="primary buy" id="buyButton" target="_blank" rel="noopener">GET THE FULL GAME // $7.99</a></div>
         <p class="hint">Bought it? Paste the license key from your receipt email.</p>
         <div class="row"><input id="licenseInput" placeholder="LICENSE KEY" autocomplete="off" spellcheck="false"><button id="unlockButton">UNLOCK</button></div>
@@ -569,6 +569,98 @@
           { name: 'UPLINK DISH', area: [-48, 600, 48, 700], barrels: 4, drones: 2, wardens: 1 },
         ],
       },
+      (() => {
+        // Delta-9's launch silos: four round shafts sunk deep into the slag plain, each ringed by a concrete collar with a
+        // gantry tower beside it, fed by a pipeline on stilts from the refinery to the south. The tanks are round with domed
+        // tops; the launch bunker and the ammunition shed are square concrete. Vents in the silo floors lift you back out.
+        const silos = [[60, 260], [160, 260], [60, 420], [160, 420]], pumps = [150, 330, 510];
+        return {
+          name: 'DELTA-9', title: 'LAUNCH SILOS', music: 'rivet', music2: 'acidbath', top: 100, roundBlocks: true, start: [0, 32, -24], yaw: 0, exit: [0, 31, 700, true],
+          since: 'episodes', canyon: true, crowd: 1,
+          brief: 'DESTROY THE FUEL PUMPS ALONG THE PIPELINE',
+          sky: { zenith: [0.05, 0.08, 0.04], fog: [0.24, 0.28, 0.17], sun: [0.75, 0.8, 0.55], sunDir: [0.35, 0.5, 0.75] },
+          walls: { lower: [['wallRust', 0.4], ['wallTech', 0.3], ['wallPipes', 0.3]], upper: [['wallRust', 0.5], ['wallUpper', 0.5]] },
+          rooms: [
+            [-256, -48, 256, 752, MOON, 20, SKY, 'wallRust'],
+            oval(0, -20, 20, 20, PAD, 22, undefined, { raise: true, side: 'wallTech' }),
+            // The pipeline's stilts and the pump pads beside it.
+            ...[72, 120, 168, 216, 264, 312, 360, 408, 456, 504, 552, 600].map(z => [-152, z, -148, z + 4, PLATE, 30, SKY, 'wallTech']),
+            ...pumps.map(z => [-140, z - 10, -120, z + 10, PAD, 26, SKY, 'wallTech']),
+            // The tank farm.
+            oval(-50, 226, 14, 14, PLATE, 44, undefined, { raise: true, side: 'wallRust', crown: 4 }),
+            oval(-14, 254, 11, 11, PLATE, 40, undefined, { raise: true, side: 'wallRust', crown: 3 }),
+            oval(-62, 276, 12, 12, PLATE, 38, undefined, { raise: true, side: 'wallRust', crown: 3 }),
+            // The silos: a collar round each shaft, the shaft itself with a vent in its floor, and a gantry tower.
+            ...silos.flatMap(([x, z]) => [
+              oval(x, z, 23, 23, PAD, 22, undefined, { raise: true, side: 'wallTech' }),
+              oval(x, z, 16, 16, GRATE, -50, undefined, { side: 'wallTech' }),
+              oval(x, z, 6, 6, VENT, -50, undefined, { raise: true }),
+              [x + 24, z - 4, x + 32, z + 4, PLATE, 70, SKY, 'wallTech'],
+            ]),
+            // Radar masts either side of the bunker.
+            [-84, 588, -80, 592, PLATE, 78, SKY, 'wallTech'], [80, 588, 84, 592, PLATE, 72, SKY, 'wallTech'],
+            // The launch gantry over the gate.
+            [-32, 696, -28, 704, PLATE, 64, SKY, 'wallTech'], [28, 696, 32, 704, PLATE, 64, SKY, 'wallTech'],
+            // The launch bunker: a concrete block with a roofed hall inside and one door to the south.
+            [-48, 556, 48, 644, PLATE, 46, SKY, 'wallTech'], [-40, 564, 40, 636, PAD, 20, 38, null, 46], [-10, 556, 10, 564, PAD, 20, 34, null, 46],
+            // Console banks down both walls and across the back, round the launch control.
+            [-40, 584, -34, 628, PLATE, 25, 38, 'wallComputer', 46], [34, 584, 40, 628, PLATE, 25, 38, 'wallComputer', 46], [-20, 630, 20, 636, PLATE, 25, 38, 'wallComputer', 46],
+            // The ammunition shed, its door bricked up.
+            [180, 560, 220, 604, PLATE, 34, SKY, 'wallTech'], [184, 564, 216, 600, PAD, 20, 30, null, 34], [196, 560, 204, 564, PAD, 20, 28, null, 34],
+            oval(0, 700, 24, 20, PAD, 21, undefined, { raise: true, side: 'wallTech' }),
+          ],
+          // A low slag plain with sludge pools, walled east and west by ridges, graded flat round everything built on it.
+          terrain: {
+            side: 'wallRust', hills: 8, small: 14, boulders: 90, water: -6, liquid: 'floorSludge',
+            craters: [[-100, 80, 26, 6], [100, 40, 22, 5], [-10, 470, 24, 6]],
+            lakes: [[-70, 420, 46, 14], [175, 110, 38, 12], [-190, 700, 34, 12], [120, 520, 24, 11], [-200, 40, 30, 12], [-20, 515, 16, 8], [-190, 455, 20, 10]],
+            ridges: [[240, -48, 752, 24, 34], [-242, -48, 752, 22, 28]],
+            clear: [[-30, -48, 30, 10], [-160, 136, -112, 164], [-160, 316, -112, 344], [-160, 496, -112, 524], [24, 216, 200, 452], [-84, 198, 4, 300],
+              [-60, 548, 60, 652], [172, 548, 228, 612], [-34, 676, 34, 724], [-92, 580, 92, 610]],
+          },
+          stairs: [], blocks: [],
+          girders: [
+            [-152, 30, 60, -148, 34, 640], [-148, 30, 598, -48, 34, 602],
+            ...silos.map(([x, z]) => [x + 6, 56, z - 1.5, x + 24, 59, z + 1.5]),
+            // Launch rails up each silo wall beside the racked fighter, and the gantry beam over the launch gate.
+            ...silos.flatMap(([x, z]) => [[x + 14, -50, z - 3.5, x + 15, 20, z - 2.5], [x + 14, -50, z + 2.5, x + 15, 20, z + 3.5]]),
+            [-32, 58, 698, 32, 61, 702],
+            [-88, 60, 589, -76, 62, 591], [76, 56, 589, 88, 58, 591],
+          ],
+          gates: [[-10, 556, 10, 560, 'south', 'chain'], [196, 560, 204, 564, 'south', 'cracked']],
+          // The fuel line itself, lying on the stilted truss and turning east to the bunker, with a drop and a branch to each pump.
+          spinners: [
+            { kind: 'core', at: [-150, 36, 350], axis: [0, 0, 1], radius: 2, inner: 0, length: 580, speed: 0, materials: ['wallPipes', null, 'crown'] },
+            { kind: 'core', at: [-98, 36, 600], axis: [1, 0, 0], radius: 2, inner: 0, length: 100, speed: 0, materials: ['wallPipes', null, 'crown'] },
+            ...pumps.flatMap(z => [
+              { kind: 'core', at: [-147.2, 31, z], axis: [0, 1, 0], radius: 1, inner: 0, length: 9, speed: 0, materials: ['wallPipes', null, 'crown'] },
+              { kind: 'core', at: [-139.6, 26.8, z], axis: [1, 0, 0], radius: 1, inner: 0, length: 15.2, speed: 0, materials: ['wallPipes', null, 'crown'] },
+            ]),
+          ],
+          extras: {},
+          objectives: [
+            { kind: 'destroy', text: 'DESTROY THE FUEL PUMPS', targets: pumps.map(z => ['core', -130, 27.7, z, 'FUEL PUMP']) },
+            { kind: 'destroy', text: 'DIVE INTO THE SILOS AND KILL THE RACKED FIGHTERS', targets: silos.map(([x, z]) => ['core', x + 10, -48.3, z, 'RACKED FIGHTER', Math.PI / 2]) },
+            { kind: 'gate', text: 'SHOOT THE LOCKS ON THE LAUNCH BUNKER', gate: 0 },
+            { kind: 'destroy', text: 'DESTROY THE LAUNCH CONTROL CORE', targets: [['core', 0, 21.7, 620, 'LAUNCH CONTROL']] },
+            { kind: 'exit', text: 'REACH THE LAUNCH GATE' },
+          ],
+          zones: [
+            { name: 'LANDING FIELD', area: [-60, -48, 60, 60], barrels: 4 },
+            { name: 'LAUNCH BUNKER', area: [-40, 564, 40, 636], barrels: 4, drones: 2, wardens: 1, health: 1 },
+            { name: 'AMMUNITION SHED', area: [184, 564, 216, 600], missile: 2, health: 1 },
+            // Inside a shaft it is that silo; back up over the collars it is the silo field again.
+            ...silos.map(([x, z], k) => ({ name: `SILO ${k + 1}`, area: [x - 16, z - 16, x + 16, z + 16], below: 28, hunters: 1 })),
+            { name: 'PIPELINE', area: [-200, 60, -100, 640], barrels: 6, drones: 4, hunters: 2, turrets: 2, health: 1, high: true },
+            { name: 'TANK FARM', area: [-100, 180, 20, 320], barrels: 10, drones: 3, strikers: 1, health: 1 },
+            { name: 'SILO FIELD', area: [20, 200, 220, 460], barrels: 8, drones: 4, hunters: 2, wardens: 1, turrets: 2, missile: 1, high: true },
+            { name: 'EAST FLATS', area: [20, -48, 256, 200], barrels: 4, drones: 3, hunters: 2 },
+            { name: 'BUNKER APRON', area: [-120, 460, 256, 563], barrels: 6, drones: 3, strikers: 1, turrets: 1, missile: 1 },
+            { name: 'SLUDGE FLATS', area: [-256, 320, 20, 552], drones: 4, hunters: 2, health: 1, weapon: 1, high: true },
+            { name: 'LAUNCH GATE', area: [-256, 644, 256, 752], drones: 3, hunters: 1, health: 1 },
+          ],
+        };
+      })(),
       {
         // A refinery is round things joined by pipes: settling basins, clarifier pools and storage tanks with domed tops,
         // towers in the yards, and a long barrel-roofed hall. The ducts and sheds between them stay square.
@@ -675,98 +767,75 @@
           { name: 'FLARE DECK', area: [-40, 664, 40, 720], barrels: 4, drones: 2, wardens: 1 },
         ],
       },
-      (() => {
-        // Delta-9's launch silos: four round shafts sunk deep into the slag plain, each ringed by a concrete collar with a
-        // gantry tower beside it, fed by a pipeline on stilts from the refinery to the south. The tanks are round with domed
-        // tops; the launch bunker and the ammunition shed are square concrete. Vents in the silo floors lift you back out.
-        const silos = [[60, 260], [160, 260], [60, 420], [160, 420]], pumps = [150, 330, 510];
-        return {
-          name: 'DELTA-9', title: 'LAUNCH SILOS', music: 'rivet', music2: 'acidbath', top: 100, roundBlocks: true, start: [0, 32, -24], yaw: 0, exit: [0, 31, 700, true],
-          since: 'episodes', canyon: true, crowd: 1,
-          brief: 'DESTROY THE FUEL PUMPS ALONG THE PIPELINE',
-          sky: { zenith: [0.05, 0.08, 0.04], fog: [0.24, 0.28, 0.17], sun: [0.75, 0.8, 0.55], sunDir: [0.35, 0.5, 0.75] },
-          walls: { lower: [['wallRust', 0.4], ['wallTech', 0.3], ['wallPipes', 0.3]], upper: [['wallRust', 0.5], ['wallUpper', 0.5]] },
-          rooms: [
-            [-256, -48, 256, 752, MOON, 20, SKY, 'wallRust'],
-            oval(0, -20, 20, 20, PAD, 22, undefined, { raise: true, side: 'wallTech' }),
-            // The pipeline's stilts and the pump pads beside it.
-            ...[72, 120, 168, 216, 264, 312, 360, 408, 456, 504, 552, 600].map(z => [-152, z, -148, z + 4, PLATE, 30, SKY, 'wallTech']),
-            ...pumps.map(z => [-140, z - 10, -120, z + 10, PAD, 26, SKY, 'wallTech']),
-            // The tank farm.
-            oval(-50, 226, 14, 14, PLATE, 44, undefined, { raise: true, side: 'wallRust', crown: 4 }),
-            oval(-14, 254, 11, 11, PLATE, 40, undefined, { raise: true, side: 'wallRust', crown: 3 }),
-            oval(-62, 276, 12, 12, PLATE, 38, undefined, { raise: true, side: 'wallRust', crown: 3 }),
-            // The silos: a collar round each shaft, the shaft itself with a vent in its floor, and a gantry tower.
-            ...silos.flatMap(([x, z]) => [
-              oval(x, z, 23, 23, PAD, 22, undefined, { raise: true, side: 'wallTech' }),
-              oval(x, z, 16, 16, GRATE, -50, undefined, { side: 'wallTech' }),
-              oval(x, z, 6, 6, VENT, -50, undefined, { raise: true }),
-              [x + 24, z - 4, x + 32, z + 4, PLATE, 70, SKY, 'wallTech'],
-            ]),
-            // Radar masts either side of the bunker.
-            [-84, 588, -80, 592, PLATE, 78, SKY, 'wallTech'], [80, 588, 84, 592, PLATE, 72, SKY, 'wallTech'],
-            // The launch gantry over the gate.
-            [-32, 696, -28, 704, PLATE, 64, SKY, 'wallTech'], [28, 696, 32, 704, PLATE, 64, SKY, 'wallTech'],
-            // The launch bunker: a concrete block with a roofed hall inside and one door to the south.
-            [-48, 556, 48, 644, PLATE, 46, SKY, 'wallTech'], [-40, 564, 40, 636, PAD, 20, 38, null, 46], [-10, 556, 10, 564, PAD, 20, 34, null, 46],
-            // Console banks down both walls and across the back, round the launch control.
-            [-40, 584, -34, 628, PLATE, 25, 38, 'wallComputer', 46], [34, 584, 40, 628, PLATE, 25, 38, 'wallComputer', 46], [-20, 630, 20, 636, PLATE, 25, 38, 'wallComputer', 46],
-            // The ammunition shed, its door bricked up.
-            [180, 560, 220, 604, PLATE, 34, SKY, 'wallTech'], [184, 564, 216, 600, PAD, 20, 30, null, 34], [196, 560, 204, 564, PAD, 20, 28, null, 34],
-            oval(0, 700, 24, 20, PAD, 21, undefined, { raise: true, side: 'wallTech' }),
-          ],
-          // A low slag plain with sludge pools, walled east and west by ridges, graded flat round everything built on it.
-          terrain: {
-            side: 'wallRust', hills: 8, small: 14, boulders: 90, water: -6, liquid: 'floorSludge',
-            craters: [[-100, 80, 26, 6], [100, 40, 22, 5], [-10, 470, 24, 6]],
-            lakes: [[-70, 420, 46, 14], [175, 110, 38, 12], [-190, 700, 34, 12], [120, 520, 24, 11], [-200, 40, 30, 12], [-20, 515, 16, 8], [-190, 455, 20, 10]],
-            ridges: [[240, -48, 752, 24, 34], [-242, -48, 752, 22, 28]],
-            clear: [[-30, -48, 30, 10], [-160, 136, -112, 164], [-160, 316, -112, 344], [-160, 496, -112, 524], [24, 216, 200, 452], [-84, 198, 4, 300],
-              [-60, 548, 60, 652], [172, 548, 228, 612], [-34, 676, 34, 724], [-92, 580, 92, 610]],
-          },
-          stairs: [], blocks: [],
-          girders: [
-            [-152, 30, 60, -148, 34, 640], [-148, 30, 598, -48, 34, 602],
-            ...silos.map(([x, z]) => [x + 6, 56, z - 1.5, x + 24, 59, z + 1.5]),
-            // Launch rails up each silo wall beside the racked fighter, and the gantry beam over the launch gate.
-            ...silos.flatMap(([x, z]) => [[x + 14, -50, z - 3.5, x + 15, 20, z - 2.5], [x + 14, -50, z + 2.5, x + 15, 20, z + 3.5]]),
-            [-32, 58, 698, 32, 61, 702],
-            [-88, 60, 589, -76, 62, 591], [76, 56, 589, 88, 58, 591],
-          ],
-          gates: [[-10, 556, 10, 560, 'south', 'chain'], [196, 560, 204, 564, 'south', 'cracked']],
-          // The fuel line itself, lying on the stilted truss and turning east to the bunker, with a drop and a branch to each pump.
-          spinners: [
-            { kind: 'core', at: [-150, 36, 350], axis: [0, 0, 1], radius: 2, inner: 0, length: 580, speed: 0, materials: ['wallPipes', null, 'crown'] },
-            { kind: 'core', at: [-98, 36, 600], axis: [1, 0, 0], radius: 2, inner: 0, length: 100, speed: 0, materials: ['wallPipes', null, 'crown'] },
-            ...pumps.flatMap(z => [
-              { kind: 'core', at: [-147.2, 31, z], axis: [0, 1, 0], radius: 1, inner: 0, length: 9, speed: 0, materials: ['wallPipes', null, 'crown'] },
-              { kind: 'core', at: [-139.6, 26.8, z], axis: [1, 0, 0], radius: 1, inner: 0, length: 15.2, speed: 0, materials: ['wallPipes', null, 'crown'] },
-            ]),
-          ],
-          extras: {},
-          objectives: [
-            { kind: 'destroy', text: 'DESTROY THE FUEL PUMPS', targets: pumps.map(z => ['core', -130, 27.7, z, 'FUEL PUMP']) },
-            { kind: 'destroy', text: 'DIVE INTO THE SILOS AND KILL THE RACKED FIGHTERS', targets: silos.map(([x, z]) => ['core', x + 10, -48.3, z, 'RACKED FIGHTER', Math.PI / 2]) },
-            { kind: 'gate', text: 'SHOOT THE LOCKS ON THE LAUNCH BUNKER', gate: 0 },
-            { kind: 'destroy', text: 'DESTROY THE LAUNCH CONTROL CORE', targets: [['core', 0, 21.7, 620, 'LAUNCH CONTROL']] },
-            { kind: 'exit', text: 'REACH THE LAUNCH GATE' },
-          ],
-          zones: [
-            { name: 'LANDING FIELD', area: [-60, -48, 60, 60], barrels: 4 },
-            { name: 'LAUNCH BUNKER', area: [-40, 564, 40, 636], barrels: 4, drones: 2, wardens: 1, health: 1 },
-            { name: 'AMMUNITION SHED', area: [184, 564, 216, 600], missile: 2, health: 1 },
-            // Inside a shaft it is that silo; back up over the collars it is the silo field again.
-            ...silos.map(([x, z], k) => ({ name: `SILO ${k + 1}`, area: [x - 16, z - 16, x + 16, z + 16], below: 28, hunters: 1 })),
-            { name: 'PIPELINE', area: [-200, 60, -100, 640], barrels: 6, drones: 4, hunters: 2, turrets: 2, health: 1, high: true },
-            { name: 'TANK FARM', area: [-100, 180, 20, 320], barrels: 10, drones: 3, strikers: 1, health: 1 },
-            { name: 'SILO FIELD', area: [20, 200, 220, 460], barrels: 8, drones: 4, hunters: 2, wardens: 1, turrets: 2, missile: 1, high: true },
-            { name: 'EAST FLATS', area: [20, -48, 256, 200], barrels: 4, drones: 3, hunters: 2 },
-            { name: 'BUNKER APRON', area: [-120, 460, 256, 563], barrels: 6, drones: 3, strikers: 1, turrets: 1, missile: 1 },
-            { name: 'SLUDGE FLATS', area: [-256, 320, 20, 552], drones: 4, hunters: 2, health: 1, weapon: 1, high: true },
-            { name: 'LAUNCH GATE', area: [-256, 644, 256, 752], drones: 3, hunters: 1, health: 1 },
-          ],
-        };
-      })(),
+      {
+        // A glacier moon of Epsilon-5: a frozen curved world of crystal spire fields, frozen lakes and a glacier ridge with ice
+        // caves running under it, and a research compound to the west. The caves are carved out of the ridge, which runs on over
+        // them unbroken. The pylons stand on crystal pillars among the shards.
+        name: 'EPSILON-5B', title: 'GLACIER MOON', music: 'ascent', music2: 'glacier', top: 80, width: 256, start: [0, -4, -24], yaw: 0, exit: [0, 0, 722, true], since: 'six',
+        moon: { radius: 1500 }, roof: 'floorPlate',
+        sky: { zenith: [0.0, 0.01, 0.03], fog: [0.08, 0.1, 0.14], sun: [0.95, 1.0, 1.1], sunDir: [0.4, 0.35, 0.6] },
+        walls: { lower: [['wallTech', 0.6], ['wallComputer', 0.4]], upper: [['wallTech', 1]] },
+        rooms: [
+          [-512, -48, 512, 752, ICE, BASE, SKY, 'wallIce'],
+          oval(0, -24, 20, 20, PAD, BASE + 1, undefined, { raise: true, side: 'wallTech' }),
+          oval(0, 722, 26, 22, PAD, BASE + 2, undefined, { raise: true, side: 'wallTech' }),
+          // The ice caves: two cuttings into the ridge, meeting at a domed chamber, with the pump gallery running north of it.
+          tube([[96, 344], [176, 346]], 18, ICE, BASE, BASE + 10, inCave({ dome: 4, wobble: 2, grain: 14 })),
+          tube([[232, 350], [312, 344]], 18, ICE, BASE, BASE + 10, inCave({ dome: 4, wobble: 2, grain: 14 })),
+          tube([[204, 380], [204, 416]], 18, ICE, BASE, BASE + 10, inCave({ dome: 4, wobble: 2, grain: 14 })),
+          oval(204, 348, 40, 44, ICE, BASE, BASE + 14, inCave({ dome: 12, wobble: 4, grain: 18 })),
+          [-332, 404, -188, 520, PLATE, BASE + 18, SKY, 'wallTech'],
+          [-324, 412, -196, 476, GRATE, BASE, BASE + 14, null, BASE + 18, 'floorPlate'],
+          [-324, 480, -264, 512, PLATE, BASE, BASE + 12, null, BASE + 18, 'floorPlate'],
+          [-256, 480, -196, 512, PLATE, BASE, BASE + 12, null, BASE + 18, 'floorPlate'],
+          [-288, 476, -280, 480, PLATE, BASE, BASE + 10, null, BASE + 18, 'floorPlate'],
+          [-232, 476, -224, 480, PLATE, BASE, BASE + 10, null, BASE + 18, 'floorPlate'],
+          [-268, 404, -252, 412, PLATE, BASE, BASE + 10, 'wallTech', BASE + 18, 'floorPlate'],
+          [-212, 430, -204, 438, PLATE, BASE + 34, SKY, 'wallTech'],
+          // The pylons' pillars.
+          oval(-148, 144, 6, 6, ICE, BASE + 26, undefined, { raise: true, side: 'crystal' }), oval(320, 112, 6, 6, ICE, BASE + 14, undefined, { raise: true, side: 'crystal' }),
+          oval(-384, 240, 6, 6, ICE, BASE + 26, undefined, { raise: true, side: 'crystal' }), oval(428, 460, 6, 6, ICE, BASE + 38, undefined, { raise: true, side: 'crystal' }),
+        ],
+        shards: [
+          [-150, 124, 2.5, 18], [-130, 174, 3, 32], [-122, 158, 2.5, 32], [-114, 146, 3, 26], [-108, 160, 2, 26], [-164, 150, 2.5, 22],
+          [310, 110, 2.5, 32], [290, 114, 3.5, 44], [314, 86, 2.5, 18], [286, 106, 2.5, 22], [306, 88, 2.5, 22], [306, 138, 2.5, 18], [314, 150, 2.5, 18],
+          [-404, 292, 3, 22], [-450, 266, 2.5, 22], [-430, 254, 2.5, 22], [-446, 238, 2.5, 22], [-406, 242, 2.5, 14], [-428, 268, 2.5, 26], [-406, 286, 2.5, 18],
+          [440, 496, 3, 18], [450, 446, 2.5, 26], [420, 484, 3, 18], [386, 494, 2.5, 14], [448, 456, 3, 18], [408, 440, 2.5, 26], [422, 472, 2.5, 32],
+          [76, 584, 3.5, 44], [62, 574, 2.5, 44], [86, 594, 2.5, 14], [34, 590, 2.5, 32], [62, 562, 2.5, 32], [84, 540, 3.5, 44], [36, 536, 3, 38], [58, 542, 2.5, 32],
+          [-30, 302, 2.5, 26], [-74, 318, 2.5, 32], [-58, 318, 3, 44], [-30, 334, 2.5, 14], [-90, 274, 2.5, 44], [-48, 316, 3, 22],
+        ],
+        terrain: {
+          side: 'wallIce', hills: 10, small: 70, boulders: 150, water: -5, liquid: 'floorIce',
+          craters: [[-160, 52, 55, 11], [296, 672, 67, 8], [-72, 692, 31, 12], [-40, 424, 35, 10], [0, 388, 34, 11], [188, 212, 68, 9], [-260, 240, 61, 9], [116, 640, 47, 14], [-96, 192, 49, 11], [-136, 480, 43, 10], [-404, 436, 29, 10], [-296, 276, 41, 9]],
+          lakes: [[-300, 120, 60, 9], [180, 620, 70, 10], [440, 260, 50, 8]],
+          ridges: [[204, 230, 470, 96, 46], [-120, 380, 520, 40, 18], [380, 560, 740, 50, 22], [-440, 520, 720, 44, 20]],
+          clear: [[-40, -48, 40, 16], [-40, 690, 40, 752], [-352, 384, -168, 540], [-184, 106, -96, 194], [256, 76, 344, 164], [-464, 216, -376, 304], [376, 426, 464, 514], [16, 516, 104, 604], [-104, 256, -16, 344]],
+        },
+        stairs: [], blocks: [],
+        girders: [[-332, 30, 432, -188, 32, 436]],
+        gates: [[-268, 404, -252, 408, 'south', 'chain']],
+        spinners: [
+          { kind: 'ring', at: [-208, 50, 434], axis: [0, 1, 0], radius: 10, inner: 7, length: 2, speed: 0.6, materials: ['crown', 'wallTech', 'crown'] },
+        ],
+        extras: {},
+        objectives: [
+          { kind: 'destroy', text: 'SHATTER THE CRYO PYLONS', targets: [['core', -148, BASE + 32, 144, 'CRYO PYLON'], ['core', 320, BASE + 20, 112, 'CRYO PYLON'], ['core', -384, BASE + 32, 240, 'CRYO PYLON'], ['core', 428, BASE + 44, 460, 'CRYO PYLON']] },
+          { kind: 'reach', text: 'ENTER THE ICE CAVES', at: [184, BASE + 6, 344], radius: 16 },
+          { kind: 'destroy', text: 'DESTROY THE COOLANT PUMPS', targets: [['core', 188, BASE + 1.7, 324, 'COOLANT PUMP'], ['core', 220, BASE + 1.7, 372, 'COOLANT PUMP'], ['core', 204, BASE + 1.7, 408, 'COOLANT PUMP']] },
+          { kind: 'gate', text: 'BREAK INTO THE RESEARCH BASE', gate: 0 },
+          { kind: 'destroy', text: 'DESTROY THE CORE SAMPLES', targets: [['core', -300, BASE + 1.7, 496, 'CORE SAMPLE'], ['core', -220, BASE + 1.7, 496, 'CORE SAMPLE'], ['core', -260, BASE + 1.7, 444, 'CORE SAMPLE']] },
+          { kind: 'exit', text: 'REACH THE LAUNCH GATE' },
+        ],
+        // The research base's instruments: a console beside each core sample.
+        dressing: [['console', -290, BASE + 1.7, 496, 0], ['console', -210, BASE + 1.7, 496, 0], ['console', -250, BASE + 1.7, 444, 0]],
+        zones: [
+          { name: 'LANDING FIELD', area: [-60, -48, 60, 40], barrels: 2 },
+          { name: 'ICE CAVES', area: [112, 312, 296, 420], hunters: 3, drones: 2, health: 1 },
+          { name: 'RESEARCH BASE', area: [-324, 412, -196, 512], drones: 3, aegis: 1, missile: 1, health: 1 },
+          { name: 'CRYSTAL FIELDS', area: [-512, -48, 512, 380], drones: 9, skimmers: 4, lancers: 3, hunters: 2, strikers: 1, health: 3, missile: 2, high: true },
+          { name: 'NORTH ICE', area: [-512, 380, 512, 752], drones: 8, wardens: 2, skimmers: 3, escorts: 1, health: 2, missile: 1, weapon: 1, high: true },
+        ],
+      },
       {
         // The fighters sleep under barrel vaults. The well between the halls is a round shaft that goes down a long way, the
         // reservoir has a frozen shore, and the spire at the end is one tall bore.
@@ -846,75 +915,6 @@
           { name: 'STORAGE LINK', area: [40, 524, 136, 540], hunters: 1 },
           { name: 'CRYO SPIRE', area: [-40, 620, 40, 700], drones: 2, lancers: 1, high: true },
           { name: 'EXIT LEDGE', area: [-40, 700, 40, 744], barrels: 3, strikers: 1, wardens: 1 },
-        ],
-      },
-      {
-        // A glacier moon of Epsilon-5: a frozen curved world of crystal spire fields, frozen lakes and a glacier ridge with ice
-        // caves running under it, and a research compound to the west. The caves are carved out of the ridge, which runs on over
-        // them unbroken. The pylons stand on crystal pillars among the shards.
-        name: 'EPSILON-5B', title: 'GLACIER MOON', music: 'ascent', music2: 'glacier', top: 80, width: 256, start: [0, -4, -24], yaw: 0, exit: [0, 0, 722, true], since: 'six',
-        moon: { radius: 1500 }, roof: 'floorPlate',
-        sky: { zenith: [0.0, 0.01, 0.03], fog: [0.08, 0.1, 0.14], sun: [0.95, 1.0, 1.1], sunDir: [0.4, 0.35, 0.6] },
-        walls: { lower: [['wallTech', 0.6], ['wallComputer', 0.4]], upper: [['wallTech', 1]] },
-        rooms: [
-          [-512, -48, 512, 752, ICE, BASE, SKY, 'wallIce'],
-          oval(0, -24, 20, 20, PAD, BASE + 1, undefined, { raise: true, side: 'wallTech' }),
-          oval(0, 722, 26, 22, PAD, BASE + 2, undefined, { raise: true, side: 'wallTech' }),
-          // The ice caves: two cuttings into the ridge, meeting at a domed chamber, with the pump gallery running north of it.
-          tube([[96, 344], [176, 346]], 18, ICE, BASE, BASE + 10, inCave({ dome: 4, wobble: 2, grain: 14 })),
-          tube([[232, 350], [312, 344]], 18, ICE, BASE, BASE + 10, inCave({ dome: 4, wobble: 2, grain: 14 })),
-          tube([[204, 380], [204, 416]], 18, ICE, BASE, BASE + 10, inCave({ dome: 4, wobble: 2, grain: 14 })),
-          oval(204, 348, 40, 44, ICE, BASE, BASE + 14, inCave({ dome: 12, wobble: 4, grain: 18 })),
-          [-332, 404, -188, 520, PLATE, BASE + 18, SKY, 'wallTech'],
-          [-324, 412, -196, 476, GRATE, BASE, BASE + 14, null, BASE + 18, 'floorPlate'],
-          [-324, 480, -264, 512, PLATE, BASE, BASE + 12, null, BASE + 18, 'floorPlate'],
-          [-256, 480, -196, 512, PLATE, BASE, BASE + 12, null, BASE + 18, 'floorPlate'],
-          [-288, 476, -280, 480, PLATE, BASE, BASE + 10, null, BASE + 18, 'floorPlate'],
-          [-232, 476, -224, 480, PLATE, BASE, BASE + 10, null, BASE + 18, 'floorPlate'],
-          [-268, 404, -252, 412, PLATE, BASE, BASE + 10, 'wallTech', BASE + 18, 'floorPlate'],
-          [-212, 430, -204, 438, PLATE, BASE + 34, SKY, 'wallTech'],
-          // The pylons' pillars.
-          oval(-148, 144, 6, 6, ICE, BASE + 26, undefined, { raise: true, side: 'crystal' }), oval(320, 112, 6, 6, ICE, BASE + 14, undefined, { raise: true, side: 'crystal' }),
-          oval(-384, 240, 6, 6, ICE, BASE + 26, undefined, { raise: true, side: 'crystal' }), oval(428, 460, 6, 6, ICE, BASE + 38, undefined, { raise: true, side: 'crystal' }),
-        ],
-        shards: [
-          [-150, 124, 2.5, 18], [-130, 174, 3, 32], [-122, 158, 2.5, 32], [-114, 146, 3, 26], [-108, 160, 2, 26], [-164, 150, 2.5, 22],
-          [310, 110, 2.5, 32], [290, 114, 3.5, 44], [314, 86, 2.5, 18], [286, 106, 2.5, 22], [306, 88, 2.5, 22], [306, 138, 2.5, 18], [314, 150, 2.5, 18],
-          [-404, 292, 3, 22], [-450, 266, 2.5, 22], [-430, 254, 2.5, 22], [-446, 238, 2.5, 22], [-406, 242, 2.5, 14], [-428, 268, 2.5, 26], [-406, 286, 2.5, 18],
-          [440, 496, 3, 18], [450, 446, 2.5, 26], [420, 484, 3, 18], [386, 494, 2.5, 14], [448, 456, 3, 18], [408, 440, 2.5, 26], [422, 472, 2.5, 32],
-          [76, 584, 3.5, 44], [62, 574, 2.5, 44], [86, 594, 2.5, 14], [34, 590, 2.5, 32], [62, 562, 2.5, 32], [84, 540, 3.5, 44], [36, 536, 3, 38], [58, 542, 2.5, 32],
-          [-30, 302, 2.5, 26], [-74, 318, 2.5, 32], [-58, 318, 3, 44], [-30, 334, 2.5, 14], [-90, 274, 2.5, 44], [-48, 316, 3, 22],
-        ],
-        terrain: {
-          side: 'wallIce', hills: 10, small: 70, boulders: 150, water: -5, liquid: 'floorIce',
-          craters: [[-160, 52, 55, 11], [296, 672, 67, 8], [-72, 692, 31, 12], [-40, 424, 35, 10], [0, 388, 34, 11], [188, 212, 68, 9], [-260, 240, 61, 9], [116, 640, 47, 14], [-96, 192, 49, 11], [-136, 480, 43, 10], [-404, 436, 29, 10], [-296, 276, 41, 9]],
-          lakes: [[-300, 120, 60, 9], [180, 620, 70, 10], [440, 260, 50, 8]],
-          ridges: [[204, 230, 470, 96, 46], [-120, 380, 520, 40, 18], [380, 560, 740, 50, 22], [-440, 520, 720, 44, 20]],
-          clear: [[-40, -48, 40, 16], [-40, 690, 40, 752], [-352, 384, -168, 540], [-184, 106, -96, 194], [256, 76, 344, 164], [-464, 216, -376, 304], [376, 426, 464, 514], [16, 516, 104, 604], [-104, 256, -16, 344]],
-        },
-        stairs: [], blocks: [],
-        girders: [[-332, 30, 432, -188, 32, 436]],
-        gates: [[-268, 404, -252, 408, 'south', 'chain']],
-        spinners: [
-          { kind: 'ring', at: [-208, 50, 434], axis: [0, 1, 0], radius: 10, inner: 7, length: 2, speed: 0.6, materials: ['crown', 'wallTech', 'crown'] },
-        ],
-        extras: {},
-        objectives: [
-          { kind: 'destroy', text: 'SHATTER THE CRYO PYLONS', targets: [['core', -148, BASE + 32, 144, 'CRYO PYLON'], ['core', 320, BASE + 20, 112, 'CRYO PYLON'], ['core', -384, BASE + 32, 240, 'CRYO PYLON'], ['core', 428, BASE + 44, 460, 'CRYO PYLON']] },
-          { kind: 'reach', text: 'ENTER THE ICE CAVES', at: [184, BASE + 6, 344], radius: 16 },
-          { kind: 'destroy', text: 'DESTROY THE COOLANT PUMPS', targets: [['core', 188, BASE + 1.7, 324, 'COOLANT PUMP'], ['core', 220, BASE + 1.7, 372, 'COOLANT PUMP'], ['core', 204, BASE + 1.7, 408, 'COOLANT PUMP']] },
-          { kind: 'gate', text: 'BREAK INTO THE RESEARCH BASE', gate: 0 },
-          { kind: 'destroy', text: 'DESTROY THE CORE SAMPLES', targets: [['core', -300, BASE + 1.7, 496, 'CORE SAMPLE'], ['core', -220, BASE + 1.7, 496, 'CORE SAMPLE'], ['core', -260, BASE + 1.7, 444, 'CORE SAMPLE']] },
-          { kind: 'exit', text: 'REACH THE LAUNCH GATE' },
-        ],
-        // The research base's instruments: a console beside each core sample.
-        dressing: [['console', -290, BASE + 1.7, 496, 0], ['console', -210, BASE + 1.7, 496, 0], ['console', -250, BASE + 1.7, 444, 0]],
-        zones: [
-          { name: 'LANDING FIELD', area: [-60, -48, 60, 40], barrels: 2 },
-          { name: 'ICE CAVES', area: [112, 312, 296, 420], hunters: 3, drones: 2, health: 1 },
-          { name: 'RESEARCH BASE', area: [-324, 412, -196, 512], drones: 3, aegis: 1, missile: 1, health: 1 },
-          { name: 'CRYSTAL FIELDS', area: [-512, -48, 512, 380], drones: 9, skimmers: 4, lancers: 3, hunters: 2, strikers: 1, health: 3, missile: 2, high: true },
-          { name: 'NORTH ICE', area: [-512, 380, 512, 752], drones: 8, wardens: 2, skimmers: 3, escorts: 1, health: 2, missile: 1, weapon: 1, high: true },
         ],
       },
       {
@@ -8519,11 +8519,11 @@
     const launchButton = document.getElementById('launchButton'), systemMap = document.getElementById('systemMap'), systemCtx = systemMap.getContext('2d');
     const BRIEFINGS = {
       'RELAY STATION': 'The Requiem crossed fourteen months of dark and now hides in the shadow of an outer moon, unseen. Your first target is the relay station on Delta-9, which passes the Choir\'s signals between their worlds. Shut down the relay control in its hub, destroy the mast relays on the antenna field, then climb to the uplink dish and kill its emitter, and they won\'t know what is hitting them for a while longer.',
-      'TOXIN REFINERY': 'The Delta-9 relay is dark: they know something is wrong, but not what. The same moon\'s refinery turns its poison air into fuel for the swarm. Burn the fuel vats in the refinery hall and destroy the scrubber cores beyond it, because every tank that burns is a fighter that never launches, then ride the flare stack out.',
-      'LAUNCH SILOS': 'The refinery is burning, but the fuel it made already ran north along the pipeline to Delta-9\'s launch silos, where finished fighters are fuelled and fired into orbit. Destroy the fuel pumps along the pipeline, dive into the silos to kill the fighters racked at the bottom, then break into the launch bunker and wreck its control core.',
-      'CRYO VAULTS': 'Delta-9\'s silos are smoking holes, and the fire can be seen from orbit. On Epsilon-5, the forge moon, finished fighters sleep in cryo vaults, waiting for the next world to be found. Destroy the sleeping fighters in the vault hall, then break into the cryo chamber and smash the pods before they wake.',
-      'GLACIER MOON': 'The cryo vaults are wrecked, but the cold that kept them came from Epsilon-5\'s glacier moon, a frozen world of crystal spires and buried ice. Shatter the cryo pylons in the spire fields, go down into the ice caves to wreck the coolant pumps, then break into the research base and destroy its core samples.',
-      'MAGMA WORKS': 'The glacier moon is dark, and no vault will be cooled again. Epsilon-5\'s magma works cast the swarm\'s hulls from rivers of molten slag. Destroy the smelter cores in the yard, then smash the casting moulds in the pit, and the swarm stops growing.',
+      'TOXIN REFINERY': 'Delta-9\'s silos are smoking holes, but the refinery that fed them still runs, turning the moon\'s poison air into fuel for the swarm. Burn the fuel vats in the refinery hall and destroy the scrubber cores beyond it, because every tank that burns is a fighter that never launches, then ride the flare stack out.',
+      'LAUNCH SILOS': 'The Delta-9 relay is dark: they know something is wrong, but not what. Delta-9\'s launch silos are where finished fighters are fuelled and fired into orbit, fed by a pipeline from the refinery to the south. Destroy the fuel pumps along the pipeline, dive into the silos to kill the fighters racked at the bottom, then break into the launch bunker and wreck its control core.',
+      'CRYO VAULTS': 'The glacier moon is dark, and its cold has stopped flowing. On Epsilon-5 itself the vaults are warming, and the fighters sleeping in them, waiting for the next world to be found, will wake. Destroy the sleeping fighters in the vault hall, then break into the cryo chamber and smash the pods before they wake.',
+      'GLACIER MOON': 'The refinery is burning, and the fire can be seen from orbit. Next is Epsilon-5, the forge moon, where finished fighters sleep in cryo vaults. The cold that keeps them comes from Epsilon-5\'s glacier moon, a frozen world of crystal spires and buried ice. Shatter the cryo pylons in the spire fields, go down into the ice caves to wreck the coolant pumps, then break into the research base and destroy its core samples.',
+      'MAGMA WORKS': 'The cryo vaults are wrecked, and nothing in them will wake. Epsilon-5\'s magma works cast the swarm\'s hulls from rivers of molten slag. Destroy the smelter cores in the yard, then smash the casting moulds in the pit, and the swarm stops growing.',
       'MAGMA GORGE': 'The foundry is slag, but its fire still runs: a gorge a hundred units deep feeds the furnaces with lava from the moon\'s core. Destroy the smelter valves on its rims, dive into the gorge to wreck the pumps standing in the lava, silence the foundry guns, and fly out through the gate at the gorge\'s end.',
       'SIGNAL SPIRE': 'The gorge has run cold. The last target on Epsilon-5 is the signal spire that runs its defenses, held by the Spire Overseer. Destroy its two relays, then the Overseer, and the forge moon goes deaf and blind.',
       'STORM REEF': 'Epsilon-5 is deaf, but the Choir know now that something is loose among their worlds. Tau-3, the ocean moon, watches its sky from a reef of islands strung with listening masts, and the Requiem cannot slip into its shadow while they listen. Destroy the masts, sink the picket ships that patrol the lagoon, and leave through the storm gate.',
@@ -8821,12 +8821,12 @@
       launchButton.hidden = locked; paywall.hidden = !locked; licenseNote.textContent = '';
       briefing.classList.add('show'); (locked ? buyButton : launchButton).focus(); setTrack('menu');
     }
-    // Sectors 1-6 are free. The rest need a Lemon Squeezy license key, checked once against its license API and
+    // Sectors 1-4 are free. The rest need a Lemon Squeezy license key, checked once against its license API and
     // then kept in this browser. ?debug (the autopilot playtest) skips the lock.
     // Which build this is: 'web' (own site, Lemon Squeezy key), 'itch-demo' (itch.io browser demo, buy on the page)
     // or 'itch-full' (the paid itch.io download, nothing locked). tools/itch/build.mjs rewrites this line.
     const EDITION = 'web';
-    const FREE_SECTORS = EDITION === 'itch-full' ? Infinity : 6;
+    const FREE_SECTORS = EDITION === 'itch-full' ? Infinity : 4;
     const CHECKOUT_URL = 'https://REPLACE-STORE.lemonsqueezy.com/buy/REPLACE-PRODUCT';
     const PRODUCT_ID = null; // set to the Lemon Squeezy product id so keys for other products are refused
     const LICENSE_KEY = 'choirbreaker-license';
@@ -8835,7 +8835,7 @@
     buyButton.href = CHECKOUT_URL;
     if (EDITION === 'itch-demo') {
       // On itch.io the purchase is the paid download on the game's page, and progress moves over with a save code.
-      paywall.querySelector('.brief').innerHTML = '<b>The free flight ends here.</b> Sectors 7 to 36, the rest of Episode I, The Crown and Into the Void, are in the full game: thirty more sectors and every boss, for a one-time $7.99. Buy it on this page, just below the game.';
+      paywall.querySelector('.brief').innerHTML = '<b>The free flight ends here.</b> Sectors 5 to 36, the rest of Episode I, The Crown and Into the Void, are in the full game: thirty-two more sectors and every boss, for a one-time $7.99. Buy it on this page, just below the game.';
       paywall.querySelectorAll('.row, .hint').forEach(el => { el.hidden = true; el.style.display = 'none'; });
       const hint = Object.assign(document.createElement('p'), { className: 'hint', textContent: 'To keep your progress, open the menu (Esc), press COPY SAVE CODE, and load it in the full game.' });
       paywall.append(hint);

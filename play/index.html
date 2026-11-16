@@ -8845,7 +8845,8 @@
     // or 'itch-full' (the paid itch.io download, nothing locked). tools/itch/build.mjs rewrites this line.
     const EDITION = 'web';
     const FREE_SECTORS = EDITION === 'itch-full' ? Infinity : 4;
-    const CHECKOUT_URL = 'https://REPLACE-STORE.lemonsqueezy.com/buy/REPLACE-PRODUCT';
+    // The full game is sold on itch.io. (The Lemon Squeezy license-key path below stays for later, unused while this is set.)
+    const CHECKOUT_URL = 'https://jonathanweyermann.itch.io/choirbreaker';
     const PRODUCT_ID = null; // set to the Lemon Squeezy product id so keys for other products are refused
     const LICENSE_KEY = 'choirbreaker-license';
     const paywall = document.getElementById('paywall'), buyButton = document.getElementById('buyButton');
@@ -8857,6 +8858,12 @@
       paywall.querySelectorAll('.row, .hint').forEach(el => { el.hidden = true; el.style.display = 'none'; });
       const hint = Object.assign(document.createElement('p'), { className: 'hint', textContent: 'To keep your progress, open the menu (Esc), press COPY SAVE CODE, and load it in the full game.' });
       paywall.append(hint);
+    } else if (EDITION === 'web') {
+      // On the site's demo the buy button opens the itch.io page; the license-key box is hidden.
+      paywall.querySelector('.brief').innerHTML = '<b>The free flight ends here.</b> Sectors 5 to 36, the rest of Episode I, The Crown and Into the Void, are in the full game: thirty-two more sectors and every boss, for a one-time $7.99 on itch.io.';
+      buyButton.textContent = 'GET THE FULL GAME ON ITCH.IO // $7.99';
+      [licenseInput.closest('.row'), licenseNote, ...[...paywall.querySelectorAll('.hint')].filter(h => h !== licenseNote)].forEach(el => { el.hidden = true; el.style.display = 'none'; });
+      paywall.append(Object.assign(document.createElement('p'), { className: 'hint', textContent: 'To keep your progress, open the menu (Esc), press COPY SAVE CODE, and load it in the full game.' }));
     }
     const licensed = () => { try { return !!localStorage.getItem(LICENSE_KEY); } catch { return false; } };
     const sectorLocked = (index) => index >= FREE_SECTORS && !licensed() && !new URLSearchParams(location.search).has('debug');

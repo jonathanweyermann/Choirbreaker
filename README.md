@@ -1,4 +1,4 @@
-# Choirbreaker
+# Choirbreaker: Humanity's Last Stand
 
 A tiny dependency-free 3D space-flight prototype drawn with terminal characters.
 

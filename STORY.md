@@ -1,4 +1,4 @@
-# Choirbreaker: the story
+# Choirbreaker: Humanity's Last Stand. The story
 
 ## The Silence
 

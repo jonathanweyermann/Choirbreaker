@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-  <title>Choirbreaker</title>
+  <title>Choirbreaker: Humanity's Last Stand</title>
   <style>
     :root { color-scheme: dark; font-family: Consolas, "Courier New", monospace; }
     * { box-sizing: border-box; }
@@ -173,7 +173,7 @@
   <div class="hud" aria-hidden="true">
     <div class="scanlines"></div>
     <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
-    <div class="top"><div class="brand">CHOIRBREAKER <small>FLIGHT TEST</small></div><div class="mission"><span id="levelText">THETA-2</span> // <span id="zoneText">LAUNCH BAY</span><div class="objective" id="objectiveText"></div></div></div>
+    <div class="top"><div class="brand">CHOIRBREAKER <small>HUMANITY'S LAST STAND</small></div><div class="mission"><span id="levelText">THETA-2</span> // <span id="zoneText">LAUNCH BAY</span><div class="objective" id="objectiveText"></div></div></div>
     <div class="damage-flash" id="damageFlash"></div>
     <div class="shield-flash" id="shieldFlash"></div>
     <div class="aegis-flash" id="aegisFlash"></div>
@@ -217,6 +217,10 @@
       <div class="sectors" id="sectorList"></div>
       <h2>ARSENAL // TIER LIST</h2>
       <div class="arsenal" id="arsenalList"></div>
+      <h2>SAVE CODE</h2>
+      <div class="row"><button class="primary" id="exportSave">COPY SAVE CODE</button><button class="primary" id="importSave">LOAD SAVE CODE</button></div>
+      <textarea id="saveCode" rows="3" spellcheck="false" placeholder="Paste a save code here, then press LOAD SAVE CODE" style="width:100%;margin-top:10px;background:#04101a;color:#d7f9ff;border:1px solid #3f7f90;font:12px monospace;padding:8px;resize:vertical;word-break:break-all"></textarea>
+      <p id="saveNote">Moves your progress between the browser and the downloaded game, or to another computer.</p>
       <h2 id="upgradeHead">UPGRADES</h2>
       <div class="arsenal" id="upgradeList"></div>
       <p id="menuNote">Sectors unlock as you reach them, and start with the cannon, launcher and missiles you last entered them with; the time shown is your best run. Press Esc during flight to open this menu.</p>
@@ -8819,13 +8823,23 @@
     }
     // Sectors 1-6 are free. The rest need a Lemon Squeezy license key, checked once against its license API and
     // then kept in this browser. ?debug (the autopilot playtest) skips the lock.
-    const FREE_SECTORS = 6;
+    // Which build this is: 'web' (own site, Lemon Squeezy key), 'itch-demo' (itch.io browser demo, buy on the page)
+    // or 'itch-full' (the paid itch.io download, nothing locked). tools/itch/build.mjs rewrites this line.
+    const EDITION = 'web';
+    const FREE_SECTORS = EDITION === 'itch-full' ? Infinity : 6;
     const CHECKOUT_URL = 'https://REPLACE-STORE.lemonsqueezy.com/buy/REPLACE-PRODUCT';
     const PRODUCT_ID = null; // set to the Lemon Squeezy product id so keys for other products are refused
     const LICENSE_KEY = 'choirbreaker-license';
     const paywall = document.getElementById('paywall'), buyButton = document.getElementById('buyButton');
     const licenseInput = document.getElementById('licenseInput'), licenseNote = document.getElementById('licenseNote');
     buyButton.href = CHECKOUT_URL;
+    if (EDITION === 'itch-demo') {
+      // On itch.io the purchase is the paid download on the game's page, and progress moves over with a save code.
+      paywall.querySelector('.brief').innerHTML = '<b>The free flight ends here.</b> Sectors 7 to 36, the rest of Episode I, The Crown and Into the Void, are in the full game: thirty more sectors and every boss, for a one-time $7.99. Buy it on this page, just below the game.';
+      paywall.querySelectorAll('.row, .hint').forEach(el => { el.hidden = true; el.style.display = 'none'; });
+      const hint = Object.assign(document.createElement('p'), { className: 'hint', textContent: 'To keep your progress, open the menu (Esc), press COPY SAVE CODE, and load it in the full game.' });
+      paywall.append(hint);
+    }
     const licensed = () => { try { return !!localStorage.getItem(LICENSE_KEY); } catch { return false; } };
     const sectorLocked = (index) => index >= FREE_SECTORS && !licensed() && !new URLSearchParams(location.search).has('debug');
     async function unlock() {
@@ -8878,6 +8892,25 @@
     // Touch pitch defaults to stick-up climbs; the menu can flip it to the mouse's inverted style.
     const pitchButton = document.getElementById('pitchButton');
     const showPitch = () => { pitchButton.textContent = save.invertTouch ? 'PITCH: INVERTED' : 'PITCH: NORMAL'; };
+    // Save codes carry progress between versions (the browser demo and the download) and between machines.
+    const saveCode = document.getElementById('saveCode'), saveNote = document.getElementById('saveNote');
+    saveCode.addEventListener('keydown', e => e.stopPropagation());
+    document.getElementById('exportSave').addEventListener('click', async () => {
+      writeSave();
+      saveCode.value = 'CB1:' + btoa(unescape(encodeURIComponent(JSON.stringify(save))));
+      saveCode.select();
+      try { await navigator.clipboard.writeText(saveCode.value); saveNote.textContent = "Save code copied. Paste it into the other game's menu and press LOAD SAVE CODE."; }
+      catch { saveNote.textContent = "Copy the code above (it is selected) and paste it into the other game's menu."; }
+    });
+    document.getElementById('importSave').addEventListener('click', () => {
+      try {
+        const text = saveCode.value.trim().replace(/^CB1:/, '').replace(/\s+/g, '');
+        const data = JSON.parse(decodeURIComponent(escape(atob(text))));
+        if (!data || typeof data.sectors !== 'object') throw new Error('not a save');
+        localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+        saveNote.textContent = 'Save loaded. Restarting...'; setTimeout(() => location.reload(), 600);
+      } catch { saveNote.textContent = 'That code could not be read. Copy the whole code and try again.'; }
+    });
     pitchButton.addEventListener('click', () => { save.invertTouch = !save.invertTouch; writeSave(); showPitch(); });
     showPitch();
     document.getElementById('fullscreenButton').addEventListener('click', () => {
@@ -11322,7 +11355,38 @@
       { style: 'position:fixed;left:8px;bottom:8px;z-index:99;font:12px monospace;color:#9fe;background:#000a;padding:4px 6px;white-space:pre;pointer-events:none' });
     // ?debug exposes the game state on window.radix, for testing sectors from the browser console.
     if (new URLSearchParams(location.search).has('debug'))
-      window.radix = { TRACKS, async renderMusic(name, seconds, fromStep = 128) {
+      window.radix = { TRACKS,
+        // For tools/playtest/shorts.mjs: send all sound into an offline context whose clock is the sim clock, so a
+        // clip stepped frame by frame gets its shots, explosions and music exactly in sync. Returns the clock to advance.
+        recordAudio(seconds) {
+          const offline = new OfflineAudioContext(2, Math.round(44100 * (seconds + 1)), 44100), clock = { t: 0 };
+          Object.defineProperty(offline, 'currentTime', { get: () => clock.t });
+          Object.defineProperty(offline, 'state', { get: () => 'running' });
+          window.radix.recording = { saved: audioContext, offline, clock };
+          audioContext = offline; musicOn = true; musicNextTime = 0; wireMusic();
+          const step = window.radix.step;
+          window.radix.step = (s) => { step(s); clock.t += s; };
+          window.radix.recording.step = step;
+        },
+        async finishAudio() {
+          const { saved, offline, step } = window.radix.recording;
+          window.radix.step = step; audioContext = saved; window.radix.recording = null;
+          if (saved) wireMusic(); else { musicBus = musicIn = reverbIn = delayIn = echoNode = driveIn = pumpIn = null; }
+          const buffer = await offline.startRendering(), l = buffer.getChannelData(0), r = buffer.getChannelData(1);
+          // 16-bit stereo WAV, base64, for the recorder to save.
+          const bytes = new Uint8Array(44 + l.length * 4), view = new DataView(bytes.buffer);
+          const text = (at, s) => { for (let i = 0; i < s.length; i++) bytes[at + i] = s.charCodeAt(i); };
+          text(0, 'RIFF'); view.setUint32(4, 36 + l.length * 4, true); text(8, 'WAVEfmt '); view.setUint32(16, 16, true);
+          view.setUint16(20, 1, true); view.setUint16(22, 2, true); view.setUint32(24, 44100, true); view.setUint32(28, 44100 * 4, true);
+          view.setUint16(32, 4, true); view.setUint16(34, 16, true); text(36, 'data'); view.setUint32(40, l.length * 4, true);
+          for (let i = 0; i < l.length; i++) {
+            view.setInt16(44 + i * 4, Math.max(-1, Math.min(1, l[i])) * 32767, true);
+            view.setInt16(46 + i * 4, Math.max(-1, Math.min(1, r[i])) * 32767, true);
+          }
+          let s = ''; for (let i = 0; i < bytes.length; i += 32768) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 32768));
+          return btoa(s);
+        },
+        async renderMusic(name, seconds, fromStep = 128) {
         const saved = [audioContext, musicBus, musicIn, reverbIn, delayIn, noiseBuffer, echoNode, driveIn, pumpIn, track, trackName];
         const offline = audioContext = new OfflineAudioContext(1, Math.round(44100 * seconds), 44100);
         track = TRACKS[name]; trackName = name; wireMusic();
